@@ -1,0 +1,79 @@
+<html>
+ 
+<head>
+<script>
+var moving_object = null;
+ 
+function get_position(item) {
+var left = 0;
+var top = 0;
+while (item.offsetParent) {
+left += item.offsetLeft;
+top += item.offsetTop;
+item = item.offsetParent;
+}
+return {
+x: left + item.offsetLeft,
+y: top + item.offsetTop
+};
+}
+document.onmousemove = function(e) {
+e = e || window.event;
+var mousePos = mouse_coords(e);
+if (moving_object) {
+moving_object.style.position = 'absolute';
+moving_object.style.top = mousePos.y - mouseOffset.y;
+moving_object.style.left = mousePos.x - mouseOffset.x;
+return false;
+}
+}
+ 
+function mouse_down(e, item) {
+moving_object = item;
+e = e || window.event;
+var docPos = get_position(item);
+var mousePos = mouse_coords(e);
+mouseOffset = {
+x: mousePos.x - docPos.x,
+y: mousePos.y - docPos.y
+};
+}
+ 
+function mouse_coords(e) {
+return (e.pageX || e.pageY) ? {
+x: e.pageX,
+y: e.pageY
+} : {
+x: e.clientX + document.body.scrollLeft - document.body.clientLe,
+y: e.clientY + document.body.scrollTop - document.body.clientTo
+};
+}
+document.onmouseup = function() {
+moving_object = null;
+}
+ 
+function new_task() {
+new_name = prompt("Write new task");
+var elemDiv = document.createElement('div');
+elemDiv.style.cssText = 'width: 100px; height:50px; background: yellow;';
+elemDiv.onmousedown = function(event) {
+mouse_down(event, this);
+}
+elemDiv.innerHTML = new_name;
+document.body.appendChild(elemDiv);
+}
+</script>
+</head>
+ 
+<body>
+ 
+<FORM NAME="form1">
+<INPUT TYPE="button" 
+NAME="button1" 
+VALUE="Add new task" 
+onClick="new_task()">
+</FORM>
+ 
+</body>
+ 
+</html> 
