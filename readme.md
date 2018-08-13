@@ -1,1 +1,0 @@
-simply online application for mind-mapping
